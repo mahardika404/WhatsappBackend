@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(jwt({secret: key.secret}).unless({path:['/','/api/']}));
+app.use(jwt({secret: key.secret}).unless({path:['/','/api/','/api/login/']}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/socket', socketRouter);

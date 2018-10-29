@@ -1,7 +1,9 @@
 var express = require('express');
 var router  = express.Router();
+var jwt     = require('jsonwebtoken');
 
 var user = require('../models/user')
+var key  = require('../config/key.json')
 
 router.get('/',(req, res) => {
   res.send('api listen')
@@ -22,6 +24,19 @@ router.post('/user',(req, res)=>{
   })
   .then(user =>{
     res.json(user)
+  })
+})
+
+router.post('/login',(req, res)=>{
+  var phone_number = req.body.phone_number
+  user.findOne({where :{phone_number}})
+  .then(user =>{
+    var token = jwt.sign({'phone_number': req.body.phone_number}, key.secret,{expiresIn: 60 * 60})
+    if (user == null) {
+      res.json('invalid data')
+    } else{
+      res.json((token))
+    }
   })
 })
 
